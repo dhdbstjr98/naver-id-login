@@ -18,6 +18,7 @@
           });
 
         window.opener.postMessage(queries, "*");
+        window.close();
       } else {
         document.write("정상적인 접근이 아닙니다.");
       }

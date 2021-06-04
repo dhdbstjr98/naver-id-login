@@ -20,7 +20,7 @@
       }).init();
 
       window.addEventListener("message", (evt) => {
-        callback(evt.data);
+        if (evt.origin === "https://dhdbstjr98.github.io") callback(evt.data);
       });
 
       // a href="#" 태그로 spa routing 변경되는 것 방지

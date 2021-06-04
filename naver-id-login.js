@@ -3,6 +3,7 @@
   $script.type = "text/javascript";
   $script.src = "https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js";
 
+  window.naverIdLogin = { onload: () => {} };
   $script.onload = function () {
     if (!document.getElementById("naverIdLogin")) {
       const $el = document.createElement("div");
@@ -40,7 +41,8 @@
       trigger,
     };
 
-    window.naverIdLogin = naverIdLogin;
+    window.naverIdLogin = { ...window.naverIdLogin, ...naverIdLogin };
+    window.naverIdLogin.onload();
   };
 
   document.getElementsByTagName("head")[0].append($script);

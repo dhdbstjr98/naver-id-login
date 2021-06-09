@@ -3,7 +3,12 @@
   $script.type = "text/javascript";
   $script.src = "https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js";
 
-  window.naverIdLogin = { onload: () => {} };
+  window.naverIdLogin = new window.EventTarget();
+  window.naverIdLogin.addEventListener = function (type, callback) {
+    if (type === "load" && window.naverIdLogin.loaded) callback.call(this);
+    else this.__proto__.addEventListener.call(this, type, callback.bind(this));
+  };
+
   $script.onload = function () {
     if (!document.getElementById("naverIdLogin")) {
       const $el = document.createElement("div");
@@ -12,7 +17,7 @@
       document.getElementsByTagName("body")[0].append($el);
     }
 
-    function init(clientId, callback) {
+    window.naverIdLogin.init = function (clientId, callback) {
       new window.naver.LoginWithNaverId({
         clientId: clientId,
         callbackUrl: "https://dhdbstjr98.github.io/naver-id-login/callback",
@@ -30,19 +35,14 @@
         .addEventListener("click", (evt) => {
           evt.preventDefault();
         });
-    }
-
-    function trigger() {
-      document.querySelector("#naverIdLogin_loginButton img").click();
-    }
-
-    const naverIdLogin = {
-      init,
-      trigger,
     };
 
-    window.naverIdLogin = { ...window.naverIdLogin, ...naverIdLogin };
-    window.naverIdLogin.onload();
+    window.naverIdLogin.trigger = function () {
+      document.querySelector("#naverIdLogin_loginButton img").click();
+    };
+
+    window.naverIdLogin.loaded = true;
+    window.naverIdLogin.dispatchEvent(new Event("load"));
   };
 
   document.getElementsByTagName("head")[0].append($script);

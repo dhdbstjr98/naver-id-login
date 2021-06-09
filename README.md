@@ -17,9 +17,9 @@ https://dhdbstjr98.github.io/naver-id-login/callback
 
 ### 3. onload
 ```
-window.naverIdLogin.onload = function() {}
+window.naverIdLogin.addEventListener("load", function() {});
 ```
-- 네아로 스크립트가 로드되었을 때 실행 (아래 init, trigger가 이 시점에 로드됩니다.)
+- 네아로 스크립트가 로드되었을 때 실행 (아래 init, trigger가 로드된 후에 실행)
 
 ### 4. init
 ```
@@ -45,19 +45,18 @@ window.naverIdLogin.trigger();
 <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="//dhdbstjr98.github.io/naver-id-login/naver-id-login.js"></script>
 <script>
-  window.naverIdLogin.onload = function() {
+  // jQuery의 $.on 사용시 override된 addEventListener 동작x
+  window.naverIdLogin.addEventListener("load", function() {
     this.init("<clientId>", (res) => {
       if(res.error) {
         alert(res.error_description);
         return;
       }
-  
-      // success
-      // do something with access token
+
       console.log(res.access_token);
     });
-  
+   
     $("#naver-id-login").click(this.trigger);
-  };
+  });
 </script>
 ```

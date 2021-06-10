@@ -60,3 +60,62 @@ window.naverIdLogin.trigger();
   });
 </script>
 ```
+
+### React
+**function component with hooks**
+```javascript
+const App = () => {
+  const [handleClick, setHandleClick] = useState(() => () => {});
+
+  useEffect(() => {
+    window.naverIdLogin.addEventListener("load", () => {
+      window.naverIdLogin.init("<clientId>", (res) => {
+        if (res.error) {
+          alert(res.error_description);
+          return;
+        }
+
+        console.log(res.access_token);
+      });
+
+      setHandleClick(() => window.naverIdLogin.trigger);
+    });
+  });
+
+  return <button onClick={handleClick}>로그인</button>;
+};
+```
+
+**class component**
+```javascript
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      handleClick: () => {},
+    };
+  }
+
+  componentDidMount() {
+    window.naverIdLogin.addEventListener("load", () => {
+      window.naverIdLogin.init("<clientId>", (res) => {
+        if (res.error) {
+          alert(res.error_description);
+          return;
+        }
+
+        console.log(res.access_token);
+      });
+
+      this.setState({
+        ...this.state,
+        handleClick: window.naverIdLogin.trigger,
+      });
+    });
+  }
+
+  render() {
+    return <button onClick={this.state.handleClick}>로그인</button>;
+  }
+}
+```

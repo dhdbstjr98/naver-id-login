@@ -25,9 +25,17 @@
         loginButton: { color: "green", type: 1, height: 0 },
       }).init();
 
-      window.addEventListener("message", (evt) => {
+      const onMessage = (evt) => {
         if (evt.origin === "https://dhdbstjr98.github.io") callback(evt.data);
-      });
+      }
+
+      window.addEventListener("message", onMessage);
+
+      window.naverIdLogin.removeEventListener = function(type, callback) {
+        if(type === "load")
+          window.removeEventListener("message", onMessage)
+        this.__proto__.removeEventListener.call(this, type, callback.bind(this))
+      }
 
       // a href="#" 태그로 spa routing 변경되는 것 방지
       document
